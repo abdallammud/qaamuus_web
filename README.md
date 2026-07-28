@@ -205,3 +205,43 @@ Grammatical labels (part of speech, gender) and subject-domain names are
 translated too — see `Entry::posLabel()` / `Entry::domainName()` and the
 `ui.pos`, `ui.gender`, `ui.domain_labels` groups. Domain codes contain dots
 (`daaw.`), so the group is fetched as an array rather than by dotted key.
+
+---
+
+## 13. Local vs live environments
+
+Two environment files are kept side by side. **Neither is committed** — both are
+excluded by `.gitignore`, and no credentials appear anywhere in this repo.
+
+| File | Used by | Purpose |
+| --- | --- | --- |
+| `.env` | your machine | development — local MySQL, `APP_DEBUG=true`, `APP_ENV=local` |
+| `.env.production` | the live server | upload to Hostinger and **rename to `.env`** |
+| `.env.example` | new clones | committed template, all secrets blank |
+
+Laravel only ever reads `.env`, so `.env.production` sitting in the project
+folder has no effect on local development. Nothing needs swapping.
+
+**Live site:** <https://qaamuus.abdullahi.me> — Hostinger shared hosting, deployed
+by GitHub integration, domain root pointed at `public/`.
+
+Key differences in the live file:
+
+- `APP_ENV=production`, `APP_DEBUG=false`, `LOG_LEVEL=error`
+- `APP_URL=https://qaamuus.abdullahi.me`
+- `APP_LOCALE=so` — the live site greets first-time visitors in Somali
+  (local stays `en`; the `EN | SO` toggle works the same in both)
+- `SESSION_SECURE_COOKIE=true` — cookies restricted to HTTPS
+- Hostinger MySQL credentials. **The DB password contains `#`, so it is quoted**
+  in the file — unquoted, dotenv would treat `#` as the start of a comment and
+  silently truncate the password, giving a confusing "access denied".
+
+### Deploying
+
+1. Commit and push to `main` (`vendor/` and `public/build` are committed, so the
+   host needs neither Composer nor Node — see §7).
+2. Pull the new commit in hPanel → Git.
+3. `.env` is untracked and stays put across pulls. Keep a backup anyway.
+
+After changing Blade or CSS, run `npm run build` and commit `public/build`, or
+the live site keeps serving stale assets.
