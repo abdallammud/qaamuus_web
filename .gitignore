@@ -14,13 +14,16 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
 /storage/*.key
 /storage/pail
-/vendor
+
+# NOTE: /vendor and /public/build are deliberately COMMITTED so the repo can be
+# deployed straight to a host without Composer or Node. After changing any
+# Blade/CSS, run `npm run build` and commit public/build again. After changing
+# composer.json, run `composer install` and commit vendor again.
 _ide_helper.php
 Homestead.json
 Homestead.yaml
