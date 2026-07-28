@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide Alpine elements until initialised */
+[x-cloak] { display: none !important; }
+
+/* Readable body copy inside extracted PDF documents */
+.prose-doc p { margin-bottom: 0.75rem; }
+.prose-doc p:last-child { margin-bottom: 0; }
